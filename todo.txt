@@ -1,0 +1,22 @@
+Paginazione 
+https://www.codewars.com/api/v1/users/Voile/code-challenges/completed
+https://www.codewars.com/api/v1/users/Voile/code-challenges/completed?page=1
+https://www.codewars.com/api/v1/users/Voile/code-challenges/completed?page=2
+
+Ordinare in base a qualcosa
+Vedi come già fatto su JS
+Usare computed
+
+Tipizzare meglio
+
+Cards
+
+Suddivisione in componenti
+
+Stato globale
+
+Pagina dettaglio Kata
+
+Portare CSS sparso su un file
+
+Aggiungi rimuovi a lista students

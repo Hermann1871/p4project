@@ -19,7 +19,7 @@ const useFetch = (url: string, options?: RequestInit) => {
 
 
 
-const { data, error } = useFetch("https://rickandmortyapi.com/api/character")
+const { data, error } = useFetch("https://andmortyapi.com/api/character")
 // const { data, error } = useFetch('https://jsonplaceholder.typicode.com/todos');
 
 console.log("Data", data)

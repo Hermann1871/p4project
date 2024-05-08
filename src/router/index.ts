@@ -9,6 +9,9 @@ import StudentsList from '@/views/StudentsList.vue'
 import CodewarsUserView from '@/views/CodewarsUserView.vue'
 import RedirectView from '@/views/RedirectView.vue'
 import OpenWeatherView from '@/views/OpenWeatherView.vue'
+import LoadingTest from '@/components/LoadingTest.vue'
+import UserChallengesView from '@/views/UserChallengesView.vue'
+import StudentsCardsView from '@/views/StudentsCardsView.vue'
 
 import('../views/ProVa.vue')
 
@@ -65,9 +68,21 @@ export const router = createRouter({
     }
     ,
     {
+      path: '/studentsCards',
+      name: 'StudentCards',
+      component: StudentsCardsView
+    }
+    ,
+    {
       path: "/codewars/users/:id",
       name: "detail",
       component: CodewarsUserView
+    }
+    ,
+    {
+      path: "/codewars/users/:id/challenges",
+      name: "challenges",
+      component: UserChallengesView
     }
     ,
     {
@@ -80,6 +95,12 @@ export const router = createRouter({
       path: "/weather",
       name: "weather",
       component: OpenWeatherView
+    }
+    ,
+    {
+      path: "/loading",
+      name: "loading",
+      component: LoadingTest
     }
   ]
 })

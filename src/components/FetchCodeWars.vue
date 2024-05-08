@@ -1,103 +1,100 @@
 <!-- https://www.codewars.com/users/leaderboard/kata -->
 
 <script setup lang="ts">
+
+import type { Student } from "@/models/student";
+import { ref, watchEffect, onMounted, } from "vue";
 import axios from "axios";
-import { ref, watchEffect, computed } from "vue";
-import students from '../assets/studenti.json';
-import router from "../router/index"
+// import router from "../router/index"
+import studentData from '../assets/studenti.json';
+
+const students: Student[] = studentData as Student[];
 
 // Props
-const props = defineProps(['userName'])
-console.log("props userName", props.userName)
-console.log("props", props)
+const props = defineProps(['userName']);
+console.log("props userName", props.userName);
+console.log("props", props);
 
 // Json Studenti
-console.log("Studenti", students)
+console.log("Studenti", students);
 console.log("Numero studenti", students.length);
-console.log("Studente 0", students[0].imgURL)
+console.log("Studente 0", students[0].imgURL);
+
+const isLoading = ref<boolean>(true);
 
 const textInputRef = ref('');
 const searchedUserRef = ref(props.userName);
 const currentUserRef = ref("");
 
+const nameRef = ref("")
 const honorRef = ref(0);
 const positionRef = ref(0);
 const rankOverallRef = ref({});
 const rankLanguagesRef = ref({});
 
-const currentStudentRef = ref(students[12]);
+const currentStudentRef = ref<Student>(students[0]);
 
 // const currentStudentRef = ref(students.find((el) => el.username === props.userName));
 // watchEffect(() => {
 //     currentStudentRef.value = students.find((el) => el.username === props.userName);
 // });
 
-let student = students.find((el) => el.username === props.userName)
-// let isStudent = false
+// SI PUO' SPOSTARE DENTRO WATCH EFFECT (ma lì non ci sono props!)??????????????????
+let student = students.find((el) => el.username === props.userName);
 if (student) {
-    // console.log("PIPPPO 999", student)
-    // console.log("PIPPPO 8888", student?.imgURL)
     currentStudentRef.value = student;
-    // isStudent = true;
 }
-
-// const currentStudent = computed(() => {
-//     console.log("COMPUTED")
-//     student = students.find((el) => el.username === props.userName)
-//     // currentStudentRef.value = student;
-//     return student
-// })
-
-// CHAT
-// const currentStudent = computed(() => {
-//     console.log("COMPUTED")
-//     student = students.find((el) => el.username === props.userName)
-//     currentStudentRef.value = student;
-//     return student
-// })
-
-// const currentStudent = computed(() => {
-//     console.log("COMPUTED")
-//     const student = students.find((el) => el.username === props.userName)
-//     return student
-// })
-
-
 
 const fetchUserData = async () => {
 
+    isLoading.value=true;
+
     try {
+
+        // isLoading.value = true;
+        // console.log("IS LOADING 1", isLoading.value)
+        // await new Promise(resolve => setTimeout(resolve, 3000));
+
         const response = await axios.get(`https://www.codewars.com/api/v1/users/${searchedUserRef.value}`);
         const data = response?.data;
 
         currentStudentRef.value = { name: "", username: "" };
 
         if (data) {
-            console.log("Aggiorno User")
-            currentUserRef.value = data.username
+            console.log("Aggiorno User");
+            currentUserRef.value = data.username;
+            nameRef.value = data.name;
             honorRef.value = data.honor ?? 0;
             positionRef.value = data.leaderboardPosition ?? 0;
             rankOverallRef.value = data.ranks?.overall ?? {};
             rankLanguagesRef.value = data.ranks?.languages ?? {};
 
             //test
-            student = students.find((el) => el.username === searchedUserRef.value)
-            console.log("E' uno studente?", student, "Props", props.userName, "searchedUserRef.value", searchedUserRef.value)
+            student = students.find((el) => el.username === searchedUserRef.value);
+            console.log("E' uno studente?", student, "Props", props.userName, "searchedUserRef.value", searchedUserRef.value);
             if (student) {
-                console.log("Aggiorno studente")
+                console.log("Aggiorno studente");
                 currentStudentRef.value = student;
             }
             // test END
-
-            // router.push({ name: 'detail', params: { id: "Hermann1871" } });
-
-            // { name: 'detail', params: { id } }
         }
-        console.log("Data", data)
-        console.log("Data username", data.username)
+
+        // isLoading.value = false;
+        console.log("IS LOADING 2.2", isLoading.value);
+
+        console.log("Data", data);
+        console.log("Data username", data.username);
+
     } catch (error) {
         console.error("Errore", error);
+        // isLoading.value = false;
+        // console.log("IS LOADING 2.1", isLoading.value);
+    } finally {
+        isLoading.value = false;
+        // console.log("IS LOADING 2", isLoading.value);
     }
+
+
 };
 
 watchEffect(() => {
@@ -106,27 +103,41 @@ watchEffect(() => {
 
 function changeUser() {
     searchedUserRef.value = textInputRef.value;
-    // currentUserRef.value = 
     textInputRef.value = '';
 }
+
+// onMounted(() => {
+//     setTimeout(() => {
+//         console.log("GGGGGGGGGGGGGGGGGG")
+//         isLoading.value = false;
+//     }, 5000);
+// });
+
 </script>
 
 <template>
-    <!-- <h3>CodeWars Component Fetch...</h3> -->
-
     <form @submit.prevent="changeUser">
         <input v-model="textInputRef">
         <button>Visualizza utente</button><br><br>
     </form>
 
-    <p v-if="searchedUserRef !== currentUserRef" class="error">NOT FOUND You searched: {{ searchedUserRef }}</p>
+    <template v-if="!isLoading">
+        <!-- <p>LOADED</p> -->        
+        <p v-if="searchedUserRef !== currentUserRef" class="error">NOT FOUND You searched: {{
+        searchedUserRef }}</p>
+    </template>
+    <template v-else>
+        LOADING ... (4)<br>
+    </template> 
 
     <template v-if="currentUserRef">
-        <img :src="currentStudentRef.imgURL" alt="">
-
-        <!-- <img :src="student?.imgURL" alt=""> -->
+        <!-- Mettere un v-if?????????????????? -->
+        <img :src="currentStudentRef.imgURL" alt="" height="200">
+        <h2>{{ currentStudentRef.name }}</h2>
 
         <h2>{{ currentUserRef }}</h2>
+
+        <p>Name (on CodeWars): {{nameRef}} </p>
 
         <p>Honor: {{ honorRef }}</p>
         <p>Position: {{ positionRef }}</p>
@@ -149,9 +160,7 @@ function changeUser() {
                 </ul>
             </li>
         </ul>
-
     </template>
-
 </template>
 
 <style>

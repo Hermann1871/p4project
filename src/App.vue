@@ -17,10 +17,11 @@ import { RouterLink, RouterView } from 'vue-router'
         <!-- <br> -->
         <RouterLink to="/prova">Prova</RouterLink>
         <RouterLink to="/page1">Page 1</RouterLink>
-        <RouterLink to="/nba">NBA</RouterLink>
+        <!-- <RouterLink to="/nba">NBA</RouterLink> -->
         <!-- <RouterLink to="/codewars">CodeWars</RouterLink> -->
         <RouterLink to="/codewars2">CodeWars 2</RouterLink>
         <RouterLink to="/students">Students</RouterLink>
+        <RouterLink to="/studentsCards">StudentsCards</RouterLink>
         <RouterLink to="/redirect">Cerca utente Codewars</RouterLink>
         <RouterLink to="/weather">Weather</RouterLink>
       </nav>
